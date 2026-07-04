@@ -1,23 +1,15 @@
-# Deploy — fleshnet-hexsecgpt-deploy
+# Deploy to Hugging Face Spaces
 
-## 1. Upload to GitHub
-- https://github.com/new → create empty repo `fleshnet-hexsecgpt-deploy`
-- Unzip this package and upload every file (keep folder structure)
-- Commit to `main`
+1. Open the Docker Space `Nussy24/fleshnet-hexsecgpt`.
+2. Upload every file from this package, preserving the `wrapper/` folder.
+3. Commit the files to the Space repository.
+4. Open **Settings → Variables and secrets**.
+5. Add the secret `HEXSECGPT_API_KEY`.
+6. Optionally add `HEXSECGPT_PROVIDER=openrouter` and a current `HEXSECGPT_MODEL`.
+7. Wait for the Docker build to finish.
+8. Open `/health` and confirm `ok` is `true` and `api_key_configured` is `true`.
+9. In FleshNet, use:
 
-## 2. Create Render Web Service
-- https://dashboard.render.com/select-repo?type=web → pick the new repo
-- Render detects `render.yaml` and pre-fills:
-  - Build: `git clone https://github.com/hexsecteam/HexSecGPT.git app || true && pip install -r requirements.txt && (test -f app/requirements.txt && pip install -r app/requirements.txt || true)`
-  - Start: `uvicorn wrapper.server:app --host 0.0.0.0 --port $PORT`
-- Plan: **Free**
+   `https://nussy24-fleshnet-hexsecgpt.hf.space/v1/chat/completions`
 
-## 3. Environment variables
-- `OPENAI_API_KEY` — required
-- `CLI_COMMAND` — required
-- `WORKING_DIR` — required
-
-Never commit real secrets. Set them in **Render → Environment**.
-
-## 4. Wait for **Live**, then copy the URL
-Append `/v1/chat/completions` and paste into Flesh•Net.
+The Space listens on port 7860 as required by Hugging Face Docker Spaces.
