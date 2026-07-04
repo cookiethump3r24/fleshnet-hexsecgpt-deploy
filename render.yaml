@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: fleshnet-hexsecgpt-deploy
+    env: python
+    plan: free
+    buildCommand: git clone https://github.com/hexsecteam/HexSecGPT.git app || true && pip install -r requirements.txt && (test -f app/requirements.txt && pip install -r app/requirements.txt || true)
+    startCommand: uvicorn wrapper.server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: CLI_COMMAND
+        sync: false
+      - key: WORKING_DIR
+        sync: false
