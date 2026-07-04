@@ -1,25 +1,40 @@
-# fleshnet-hexsecgpt-deploy
+---
+title: FleshNet HexSecGPT
+emoji: 🕸️
+colorFrom: red
+colorTo: black
+sdk: docker
+app_port: 7860
+pinned: false
+---
 
-Auto-generated deployment package produced by **Flesh•Net** for
-[hexsecteam/HexSecGPT](https://github.com/hexsecteam/HexSecGPT).
-No repository code was executed to build this ZIP.
+# FleshNet HexSecGPT Adapter
 
-## Contents
-- `wrapper/server.py` — OpenAI-compatible HTTP adapter that
-  shells out to the original CLI (`CLI_COMMAND`) and returns its stdout.
-- `requirements.txt` — wrapper runtime deps.
-- `render.yaml` — Render service definition (free plan).
-- `Dockerfile` — optional container build.
-- `.env.example` — required and optional environment variables.
-- `DEPLOY.md` — step-by-step Render deployment guide.
+A Docker Space that exposes the public `hexsecteam/HexSecGPT` framework through an OpenAI-compatible HTTP endpoint.
 
-## How it works
-On Render, the build clones the original repo into `app/` and installs its
-dependencies alongside the wrapper's. At request time the wrapper spawns
-`CLI_COMMAND` inside `WORKING_DIR` (default `app`), pipes the latest user
-message to stdin, and returns stdout as an OpenAI-compatible response.
+The source repository is cloned during the Docker build. The adapter loads the repository's public provider configuration and system prompt, but avoids its interactive terminal menu.
 
-## Endpoint
-After deploy: `https://YOUR-RENDER-APP.onrender.com/v1/chat/completions`
+## Required Space secret
 
-Paste this URL into Flesh•Net → **Settings → GitHub QuickConnect** → Save & test.
+Open **Settings → Variables and secrets → New secret** and add:
+
+- `HEXSECGPT_API_KEY` — an API key for the selected provider.
+
+## Optional Space variables
+
+- `HEXSECGPT_PROVIDER` — `openrouter` (default) or `deepseek`
+- `HEXSECGPT_MODEL` — overrides the model in the source repository
+- `HEXSECGPT_BASE_URL` — optional OpenAI-compatible base URL override
+- `HEXSECGPT_TIMEOUT_SECONDS` — defaults to `120`
+
+## Endpoints
+
+- `GET /health`
+- `GET /v1/models`
+- `POST /v1/chat/completions`
+
+For this Space, the expected FleshNet endpoint is:
+
+`https://nussy24-fleshnet-hexsecgpt.hf.space/v1/chat/completions`
+
+The public GitHub repository is a framework that calls an external model provider; it is not the team's private model. Provider rules and availability still apply.
